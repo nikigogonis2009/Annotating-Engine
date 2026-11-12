@@ -1,0 +1,16 @@
+{
+  "pdf": "sample-reading.pdf",
+  "out": "../out/sample-reading-annotated.pdf",
+  "ink": "#1749b3",
+  "note_xh_pt": 5.5,
+  "annotations": [
+    { "page": 1, "at": "top", "note": "Th: love means giving up what you value most" },
+    { "quote": "One dollar and eighty-seven cents", "occurrence": 1, "mark": "highlight", "note": "fragments = counting, desperate", "link_to": "$1.87" },
+    { "quote": "parsimony", "mark": "circle", "note": "stinginess" },
+    { "quote": "life is made up of sobs, sniffles, and smiles, with sniffles predominating", "mark": "bracket", "note": "narrator jokes: T wry" },
+    { "quote": "shabby little couch", "mark": "underline", "note": "I: poverty" },
+    { "quote": "a gray cat walking a gray fence in a gray backyard", "mark": "highlight", "note": "gray x3 = dull, trapped" },
+    { "quote": "Tomorrow would be Christmas Day", "mark": "star" },
+    { "page": 1, "at": "bottom", "note": "So far: Della is broke the day before Christmas. Prediction: she sells something precious?" }
+  ]
+}
