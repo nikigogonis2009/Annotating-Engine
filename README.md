@@ -10,7 +10,7 @@ a line when they are not side by side.
 
 ![sample](docs/sample.png)
 
-*The `--font` preview of `examples/example-plan.json`. With `--engine` the notes are in your handwriting.*
+*`examples/example-plan.json`, with notes written by the Handwriting Engine (here from the fake test handwriting in `tests/`).*
 
 ## Quick start
 
