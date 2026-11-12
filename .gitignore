@@ -1,0 +1,9 @@
+my-handwriting*.json
+.handwriting-cache/
+out/
+hw-engine/
+__pycache__/
+*.png
+!docs/*.png
+*.pdf
+!examples/sample-reading.pdf

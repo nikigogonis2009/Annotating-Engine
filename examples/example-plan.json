@@ -1,0 +1,17 @@
+{
+  "pdf": "sample-reading.pdf",
+  "out": "../out/sample-reading-annotated.pdf",
+  "ink": "#1749b3",
+  "note_xh_pt": 5.5,
+  "annotations": [
+    { "page": 1, "at": "top", "note": "theme: love is worth more than money" },
+    { "quote": "One dollar and eighty-seven cents", "occurrence": 1, "mark": "highlight", "note": "money is the problem" },
+    { "quote": "imputation of parsimony", "mark": "circle", "note": "stingy?" },
+    { "quote": "Three times Della counted it", "mark": "underline", "note": "desperate" },
+    { "quote": "life is made up of sobs, sniffles, and smiles, with sniffles predominating", "mark": "bracket", "note": "narrator voice" },
+    { "quote": "shabby little couch", "mark": "squiggle", "color": "#c0392b" },
+    { "quote": "A furnished flat at $8 per week", "mark": "box", "note": "poor" },
+    { "quote": "a gray cat walking a gray fence in a gray backyard", "mark": "highlight", "color": "green", "note": "repetition = mood" },
+    { "quote": "Tomorrow would be Christmas Day", "mark": "star" }
+  ]
+}
