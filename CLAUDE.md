@@ -10,6 +10,7 @@ written in the user's handwriting by the Handwriting Engine (`nikigogonis2009/Ha
 | `tools/write-notes.js` | Writes each note as an SVG with the Handwriting Engine, trimmed to the ink, and reports its size in points. |
 | `tests/` | `make-reading.py` (a sample page), `fake-handwriting.js` (fake samples from the engine's test pen), unit tests. |
 | `skill/niko-annotating/SKILL.md` | The Claude skill that drives all this. Zip that folder to upload it. |
+| `skill/niko-annotating/references/annotating-guide.md` | What good annotation is (AP Lang, AP Lit, poetry, college), as rules and a mark key. |
 
 How `apply` works: find each quote (`find_quote`: compares letters and digits only, so case, punctuation, ligatures
 and line-end hyphens do not matter; returns one rect per text line) -> pick each note's side and width from the margins

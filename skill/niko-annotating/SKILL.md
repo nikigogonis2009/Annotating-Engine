@@ -38,18 +38,14 @@ and LOOK at them. If a page says `NO TEXT LAYER`, it is a scan: OCR it first (`o
 
 ## 4. Decide the annotations
 
-Either Niko says what to mark, or he asks you to annotate for something (themes, characters, literary devices, key
-terms, evidence for an essay question, things to ask in class). If the focus is unclear, ask in one line before
-starting. Then annotate like a good student, not a robot:
+Either Niko says what to mark, or he asks you to annotate for something (an AP Lang rhetorical analysis, AP Lit
+close reading, a poem, a textbook chapter, evidence for an essay question). If the focus is unclear, ask in one line
+before starting.
 
-- Few and meaningful: about 2 to 5 marks per page, not every sentence. Quote short phrases; highlight a whole sentence
-  only when the whole sentence matters.
-- Notes are short (1 to 6 words: "foreshadowing", "why lie here?", "theme: sacrifice") because margins are narrow.
-  Longer thoughts go in a page note: `{"page": 1, "at": "top", "note": "..."}` or `"bottom"`.
-- Keep a consistent key and tell Niko what it is, e.g. yellow = key idea, green = imagery, circle = word to look up,
-  bracket = important passage, star = big moment, `?` note = confusing.
-- Quote the text exactly as it reads on the page (case, punctuation and line breaks do not matter). If a phrase occurs
-  more than once, add `"occurrence": n` or `"page": n`.
+**Read `references/annotating-guide.md` (next to this file) first.** It holds the rules from AP and college
+annotation guides: show thinking, not a scavenger hunt (label + effect: "anaphora → urgency"); mark sparingly (about 2
+to 5 marks per page); what to look for in rhetoric, fiction, poetry and textbooks; and the default mark key. Follow that
+key, and tell Niko what it is when you hand the page over.
 
 Write the plan (`$SCRATCH/plan.json`); paths in it are relative to the plan file, so give `pdf` and `out` as absolute paths:
 
@@ -60,7 +56,8 @@ Write the plan (`$SCRATCH/plan.json`); paths in it are relative to the plan file
       {"quote": "Tomorrow would be Christmas Day", "mark": "star"}]}
 
 Marks: `highlight` (colours: yellow, green, blue, pink, orange, purple or #rrggbb), `underline`, `squiggle`, `strike`,
-`circle`, `box`, `bracket`, `double-bracket`, `star`, `check`, `none`. Math notes: `"kind": "math"` with TeX-style input.
+`circle`, `box`, `bracket`, `double-bracket`, `vline`, `star`, `check`, `none`. Connect two passages with
+`"link_to": "<other quote on the same page>"` (an arrow through the margin). Math notes: `"kind": "math"` with TeX-style input.
 
 ## 5. Preview, then write it for real
 

@@ -59,9 +59,9 @@ class FindQuote(Base):
 
 class Apply(Base):
     def test_every_mark_with_a_preview_font(self):
-        marks = ['highlight', 'underline', 'squiggle', 'strike', 'circle', 'box', 'bracket', 'double-bracket', 'star', 'check']
+        marks = ['highlight', 'underline', 'squiggle', 'strike', 'circle', 'box', 'bracket', 'double-bracket', 'star', 'check', 'vline']
         quotes = ['That was all', 'sixty cents', 'Three times Della counted it', 'the next day would be', 'shabby little couch',
-                  'So Della did it', 'life is made up of sobs', 'gray cat', 'Tomorrow would be Christmas Day', 'powder rag']
+                  'So Della did it', 'life is made up of sobs', 'gray cat', 'Tomorrow would be Christmas Day', 'powder rag', 'mendicancy squad']
         anns = [{'quote': q, 'mark': m, 'note': m} for q, m in zip(quotes, marks)]
         anns.append({'page': 1, 'at': 'top', 'note': 'summary at the top'})
         res, out = self.run_plan(anns, '--font')
@@ -87,6 +87,25 @@ class Apply(Base):
         for i, a in enumerate(boxes):  # and off each other
             for b in boxes[i + 1:]:
                 self.assertFalse(pymupdf.Rect(a).intersects(b), (a, b))
+
+    def test_vline_and_link_between_two_quotes(self):
+        res, out = self.run_plan([
+            {'quote': 'There was clearly nothing to do', 'mark': 'vline'},
+            {'quote': 'One dollar and eighty-seven cents', 'mark': 'circle', 'link_to': '$1.87', 'note': 'same sum'},
+        ], '--font')
+        self.assertEqual(res.returncode, 0, res.stdout + res.stderr)
+        page = pymupdf.open(out)[0]
+        col = annotate.text_column(pymupdf.open(self.pdf)[0])
+        # the link runs down the left margin from the first quote to the second, near the bottom of the text
+        ys = [p.y for d in page.get_drawings() for it in d['items'] if it[0] == 'l' for p in it[1:]
+              if p.x < col.x0 - 2]
+        self.assertTrue(ys)
+        self.assertLess(min(ys), 140)
+        self.assertGreater(max(ys), 380)  # $1.87 is on the last line, at y ~ 390
+
+    def test_link_target_missing_is_reported(self):
+        res, _ = self.run_plan([{'quote': 'That was all', 'link_to': 'not on this page'}], '--font')
+        self.assertIn('to connect to', res.stdout)
 
     def test_reports_a_quote_it_cannot_find(self):
         res, _ = self.run_plan([{'quote': 'nowhere in the text', 'mark': 'circle'}], '--font')

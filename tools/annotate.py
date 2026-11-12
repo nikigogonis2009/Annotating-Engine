@@ -33,7 +33,7 @@ MIN_NOTE_W = 40.0
 MAX_NOTE_W = 190.0
 LINE_MARKS = {'highlight', 'underline', 'squiggle', 'strike'}
 SHAPE_MARKS = {'circle', 'box'}
-MARGIN_MARKS = {'bracket', 'star', 'check', 'double-bracket'}
+MARGIN_MARKS = {'bracket', 'star', 'check', 'double-bracket', 'vline'}
 ALL_MARKS = LINE_MARKS | SHAPE_MARKS | MARGIN_MARKS | {'none'}
 HIGHLIGHT_COLORS = {
     'yellow': '#ffe14d', 'green': '#8fe388', 'blue': '#8cc8ff', 'pink': '#ff9ecf', 'orange': '#ffb35c', 'purple': '#c9a3ff',
@@ -448,6 +448,39 @@ def apply(args):
                     pen_shape.draw_polyline(ln)
                     pen_shape.finish(color=color, width=width, lineCap=1, lineJoin=1, closePath=closed, fill=None)
 
+            def link(a, U):
+                """An arrow from this quote to another one on the page ("connect ideas"), looping through the margin."""
+                hit = find_quote(doc, a['link_to'], pi + 1, int(a.get('link_occurrence', 1)))
+                if not hit:
+                    report.append(f'#{a["i"] + 1}: could not find "{a["link_to"][:60]}" on page {pi + 1} to connect to')
+                    return
+                T = hit[1]
+                S = a['rects']
+                # the margin both ends are nearer to, so the arrow crosses as little text as possible
+                dl = min(r.x0 for r in S) + min(r.x0 for r in T) - 2 * m.col.x0
+                dr = 2 * m.col.x1 - max(r.x1 for r in S) - max(r.x1 for r in T)
+                side = a.get('link_side') or ('left' if dl <= dr else 'right')
+                out = -1 if side == 'left' else 1
+                down = T[0].y0 > S[0].y0
+                src = S[-1] if down else S[0]
+                dst = T[0] if down else T[-1]
+                # the lane is the narrow strip between the text and the notes (notes start GAP out), so it pushes
+                # nothing aside; only a bracket or symbol already there moves it further out
+                inner = m.inset(side, min(src.y0, dst.y0), max(src.y1, dst.y1))
+                lane = (m.col.x0 if side == 'left' else m.col.x1) + out * (3.0 + (inner + 2 if inner else 0))
+
+                def end_x(rs, r):
+                    same = [q for q in rs if abs(q.y0 - r.y0) < 1]
+                    return min(q.x0 for q in same) + 2 if side == 'left' else max(q.x1 for q in same) - 2
+
+                sx, tx = end_x(S, src), end_x(T, dst)
+                # leave and arrive along the gaps between lines, never through words
+                gs = src.y1 + 1.8 if down else src.y0 - 1.8
+                gt = dst.y0 - 1.8 if down else dst.y1 + 1.8
+                sy, ty = gs, (dst.y0 + dst.y1) / 2 + (-3 if down else 3)
+                way = [(sx, gs), (lane, gs), (lane, gt), (tx, gt), (tx, ty)]
+                stroke(hand.arrow(way), width=pen * 0.9)
+
             for a in page_items:
                 rects = a['rects']
                 mark = a['mark']
@@ -473,7 +506,7 @@ def apply(args):
                         stroke([hand.loop(U)], color=hex_rgb(color or ink))
                     elif mark == 'box':
                         stroke(hand.box(U), color=hex_rgb(color or ink))
-                    elif mark in ('bracket', 'double-bracket', 'star', 'check'):
+                    elif mark in MARGIN_MARKS:
                         side = a.get('side') if a.get('side') in ('left', 'right') else choose_side('auto', U, m)
                         a.setdefault('side', side)
                         edge = m.col.x0 - GAP if side == 'left' else m.col.x1 + GAP
@@ -483,11 +516,17 @@ def apply(args):
                             if mark == 'double-bracket':
                                 stroke(hand.bracket(edge + 2.2 * out, U.y0 + 0.5, U.y1 - 0.5, -out))
                             m.inner[side].append((U.y0, U.y1, 6.0 if mark == 'bracket' else 8.5))
+                        elif mark == 'vline':  # "this whole passage matters": a plain line down the margin
+                            stroke([hand.line((edge, U.y0), (edge, U.y1), amp=0.5, overshoot=1.0)])
+                            m.inner[side].append((U.y0, U.y1, 5.0))
                         else:
                             cx = edge + 4.5 * out
                             cy = (rects[0].y0 + rects[0].y1) / 2
                             stroke(hand.star(cx, cy) if mark == 'star' else hand.check(cx, cy))
                             m.inner[side].append((cy - 5, cy + 5, 11.0))
+
+                    if a.get('link_to'):
+                        link(a, U)
 
             # notes go in after every mark, so they can make way for brackets and symbols further down the page
             for a in page_items:

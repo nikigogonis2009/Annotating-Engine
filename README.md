@@ -57,7 +57,8 @@ Paths are relative to the plan file. See `examples/example-plan.json`.
 | `quote` | The text to mark, as it reads. Spans lines and pages' hyphenation fine. |
 | `page` | 1-based. Limits the search to that page (needed for a note with no quote). |
 | `occurrence` | Which match, when the quote appears more than once (default 1). |
-| `mark` | `highlight` (default with a quote), `underline`, `squiggle`, `strike`, `circle`, `box`, `bracket`, `double-bracket`, `star`, `check`, `none`. |
+| `mark` | `highlight` (default with a quote), `underline`, `squiggle`, `strike`, `circle`, `box`, `bracket`, `double-bracket`, `vline` (a line down the margin), `star`, `check`, `none`. |
+| `link_to`, `link_occurrence`, `link_side` | An arrow from this quote to another quote on the same page ("connect ideas"), routed through the margin and the gaps between lines. |
 | `color` | `#rrggbb` or a highlighter name: `yellow`, `green`, `blue`, `pink`, `orange`, `purple`. |
 | `note` | Margin note text (keep it short: margins are narrow). |
 | `kind` | `"math"` for TeX-style notes (`x^2`, `\frac{a}{b}`), as in the Handwriting Engine. |
